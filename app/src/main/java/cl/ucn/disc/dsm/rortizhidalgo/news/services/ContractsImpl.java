@@ -29,10 +29,20 @@ public class ContractsImpl implements Contracts {
     @Override
     public List<News> retrieveNews(Integer size) {
         // The list of news
-       final List<News> news = new ArrayList<>();
+        final List<News> news = new ArrayList<>();
 
-       // TODO: Add the faker news to the list
+        // TODO: Add the faker news to the list
 
         return news;
+    }
+
+    /**
+     * Save one News into the System.
+     *
+     * @param news
+     */
+    @Override
+    public void saveNews(News news) {
+
     }
 }
