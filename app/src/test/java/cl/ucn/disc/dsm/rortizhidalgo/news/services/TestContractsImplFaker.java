@@ -69,4 +69,26 @@ public class TestContractsImplFaker {
 
     }
 
+    /**
+     *
+     *
+     */
+    @Test
+    public void testSaveNews(){
+
+        log.debug("Testing..");
+
+
+        // The implementation
+        Contracts contracts = new ContractsImplFaker();
+        // Create news and add systems
+        //this.theNews.add(news);
+        // Call the method
+        List<News> news = contracts.retrieveNews(5);
+
+
+        log.debug("Done ..");
+
+    }
+
 }
