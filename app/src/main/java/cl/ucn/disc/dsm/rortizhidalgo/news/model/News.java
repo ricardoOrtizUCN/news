@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2020.
- * Copyright Stoday.year Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
+ * Copyright (c) 2020. Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
@@ -11,7 +10,11 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.model;
 
+import net.openhft.hashing.LongHashFunction;
+
 import java.time.ZonedDateTime;
+
+import cl.ucn.disc.dsm.rortizhidalgo.news.utils.Validation;
 
 /**
  * The Domain model: News.
@@ -69,7 +72,7 @@ public final class News {
 
     /**
      * The constructor.
-     * @param id
+
      * @param title
      * @param source
      * @param author
@@ -79,15 +82,37 @@ public final class News {
      * @param content
      * @param publishedAt
      */
-    public News(Long id, String title, String source, String author, String url, String urlImage, String description, String content, ZonedDateTime publishedAt) {
-        this.id = id;
+    public News( String title, String source, String author, String url, String urlImage, String description, String content, ZonedDateTime publishedAt) {
+       // Validation de title
+        Validation.minSize(title, 2, "title");
         this.title = title;
+
+        // Validation source
+        Validation.minSize(title, 2, "source");
         this.source = source;
+
+        // Validation author
+        Validation.minSize(title, 2, "author");
         this.author = author;
+
+        // Apply the xxHash function
+        this.id= LongHashFunction.xx().hashChars(title + "|" +source + "|" + author);
+
+        //Validation url
         this.url = url;
+
+        //Validation urlImage
         this.urlImage = urlImage;
+
+        //Validation description
         this.description = description;
+
+        //Validation content
+        Validation.notNull(content, "content");
         this.content = content;
+
+        //Validation publishedAt
+        Validation.notNull(content, "publishedAt");
         this.publishedAt = publishedAt;
     }
 
@@ -149,7 +174,7 @@ public final class News {
 
     /**
      *
-     * @return the content.
+ * @return the content.
      */
     public String getContent() {
         return content;
