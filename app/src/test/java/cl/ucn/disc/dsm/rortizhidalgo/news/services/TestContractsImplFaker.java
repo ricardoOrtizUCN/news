@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
@@ -81,12 +83,12 @@ public class TestContractsImplFaker {
 
         // The implementation
         Contracts contracts = new ContractsImplFaker();
-        // Create news and add systems
-        //this.theNews.add(news);
-        // Call the method
-        List<News> news = contracts.retrieveNews(5);
+        // Create a news
+        News news = new News("A","S","Autor", "","",
+                "Hola Mundo", "HolaMundo", ZonedDateTime.now(Clock.systemUTC()));
 
-
+        // Add news
+        contracts.saveNews(news);
         log.debug("Done ..");
 
     }
