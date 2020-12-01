@@ -86,6 +86,4 @@ public class ContractsImplFaker implements Contracts {
        // FIXME: Don't allow duplicate !!
        this.theNews.add(news);
    }
-
-
 }
