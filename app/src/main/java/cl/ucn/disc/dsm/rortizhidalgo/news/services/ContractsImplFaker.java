@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2020.
- * Copyright Stoday.year Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
+ * Copyright (c) 2020 Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
@@ -19,12 +18,15 @@ import org.slf4j.LoggerFactory;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
+import cl.ucn.disc.dsm.rortizhidalgo.news.utils.Validation;
 
 /**
  * The faker implementation of {@link Contracts}
+ *
  * @author Ricardo Ortiz-Hidalgo
  */
 public class ContractsImplFaker implements Contracts {
@@ -37,7 +39,7 @@ public class ContractsImplFaker implements Contracts {
     /**
      * The list of News.
      */
-    private final List<News> theNews= new ArrayList<>();
+    private final List<News> theNews = new ArrayList<>();
 
 
     /**
@@ -47,9 +49,8 @@ public class ContractsImplFaker implements Contracts {
         // The faker to use
         final Faker faker = Faker.instance();
 
-        for(int i = 0; i < 5; i++){
+        for (int i = 0; i < 5; i++) {
             this.theNews.add(new News(
-                    Integer.toUnsignedLong(i),
                     faker.book().title(),
                     faker.name().username(),
                     faker.name().fullName(),
@@ -69,21 +70,37 @@ public class ContractsImplFaker implements Contracts {
      * @param size size of the list
      * @return the List of News.
      */
-   @Override
-   public List<News> retrieveNews(final Integer size){
+    @Override
+    public List<News> retrieveNews(final Integer size) {
 
-       // The last "size" elements.
-        return theNews.subList(theNews.size()-size, theNews.size());
-   }
+        // Return all the data
+        if (size > theNews.size()) {
+            return Collection.unmodifiableList(this.theNews);
+        }
+        return Collection.unmodifiableList(theNews.subList(theNews.size() - size,
+                theNews.size()));
+    }
 
     /**
      * Save one News into the System.
      *
      * @param news to save
      */
-   @Override
-    public void saveNews(final News news){
-       // FIXME: Don't allow duplicate !!
-       this.theNews.add(news);
-   }
+    @Override
+    public void saveNews(final News news) {
+
+        // Nullity
+        Validation.notNull(news, "news");
+
+        // Check duplicates
+        for (News n : this.theNews) {
+            if (n.getId().equals(news.getId())) {
+                throw new IllegalArgumentException("Can't allow duplicate news!");
+            }
+
+        }
+
+        // Add news
+        this.theNews.add(news);
+    }
 }

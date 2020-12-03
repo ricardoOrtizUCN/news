@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
+ * Copyright (c) 2020 Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
  *
@@ -72,39 +72,38 @@ public final class News {
 
     /**
      * The constructor.
-
-     * @param title
-     * @param source
-     * @param author
-     * @param url
-     * @param urlImage
-     * @param description
-     * @param content
-     * @param publishedAt
+     *
+     * @param title       can't be null
+     * @param source      can't be null
+     * @param author      can't be null
+     * @param url         to the main article.
+     * @param urlImage    to the image.
+     * @param description ~full article.
+     * @param content     can't be null.
+     * @param publishedAt can't be null.
      */
-    public News( String title, String source, String author, String url, String urlImage, String description, String content, ZonedDateTime publishedAt) {
-       // Validation de title
+    public News(String title, String source, String author, String url, String urlImage, String description, String content, ZonedDateTime publishedAt) {
+        // Validation de title
         Validation.minSize(title, 2, "title");
         this.title = title;
 
         // Validation source
-        Validation.minSize(title, 2, "source");
+        Validation.minSize(source, 2, "source");
         this.source = source;
 
         // Validation author
-        Validation.minSize(title, 2, "author");
+        Validation.minSize(author, 3, "author");
         this.author = author;
 
-        // Apply the xxHash function
-        this.id= LongHashFunction.xx().hashChars(title + "|" +source + "|" + author);
+        // Hashing unique! https://github.com/Cyan4973
+        this.id = LongHashFunction.xx().hashChars(title + "|" + source + "|" + author);
 
-        //Validation url
+        // Can't be null
         this.url = url;
-
-        //Validation urlImage
         this.urlImage = urlImage;
 
         //Validation description
+        Validation.minSize(description, 10, "description");
         this.description = description;
 
         //Validation content
@@ -112,12 +111,11 @@ public final class News {
         this.content = content;
 
         //Validation publishedAt
-        Validation.notNull(content, "publishedAt");
+        Validation.notNull(publishedAt, "publishedAt");
         this.publishedAt = publishedAt;
     }
 
     /**
-     *
      * @return the id.
      */
     public Long getId() {
@@ -125,7 +123,6 @@ public final class News {
     }
 
     /**
-     *
      * @return the title.
      */
     public String getTitle() {
@@ -133,7 +130,6 @@ public final class News {
     }
 
     /**
-     *
      * @return the source.
      */
     public String getSource() {
@@ -141,7 +137,6 @@ public final class News {
     }
 
     /**
-     *
      * @return the author.
      */
     public String getAuthor() {
@@ -149,15 +144,13 @@ public final class News {
     }
 
     /**
-     *
-      * @return the URL.
+     * @return the URL.
      */
     public String getUrl() {
         return url;
     }
 
     /**
-     *
      * @return the URL image.
      */
     public String getUrlImage() {
@@ -165,7 +158,6 @@ public final class News {
     }
 
     /**
-     *
      * @return the descriptions.
      */
     public String getDescription() {
@@ -173,15 +165,13 @@ public final class News {
     }
 
     /**
-     *
- * @return the content.
+     * @return the content.
      */
     public String getContent() {
         return content;
     }
 
     /**
-     *
      * @return the date of published
      */
     public ZonedDateTime getPublishedAt() {

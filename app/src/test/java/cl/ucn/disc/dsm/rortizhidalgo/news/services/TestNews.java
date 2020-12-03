@@ -11,9 +11,14 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.time.ZonedDateTime;
+
+import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
 
 /**
  * Testing validation of class News
@@ -27,7 +32,111 @@ public class TestNews {
     private static final Logger log = LoggerFactory.getLogger(TestContractsImplFaker.class);
 
     @Test
-    public void testNews(){
+    public void testConstructor() {
 
+        log.debug("Testing ..");
+
+        // all data ok
+        News news = new News(
+                "The Title",
+                "The Source",
+                "The Author",
+                "URL",
+                "URL Image",
+                "Description",
+                "The Content",
+                ZonedDateTime.now(ZoneId.of("-3"))
+        );
+
+        log.debug("The id: {}.", news.getId());
+
+        Assertions.assertEquals(1182003507361219124L, news.getId(), "Wrong id !");
+
+        log.debug("Title null ..");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new News(
+                    "The Title",
+                    "The Source",
+                    "The Author",
+                    "URL",
+                    "URL Image",
+                    "Description",
+                    "The Content",
+                    ZonedDateTime.now(ZoneId.of("-3"))
+            );
+        });
+
+        log.debug("Source null ..");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new News(
+                    "The Title",
+                    "The Source",
+                    "The Author",
+                    "URL",
+                    "URL Image",
+                    "Description",
+                    "The Content",
+                    ZonedDateTime.now(ZoneId.of("-3"))
+            );
+        });
+
+        log.debug("Description null ..");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new News(
+                    "The Title",
+                    "The Source",
+                    "The Author",
+                    "URL",
+                    "URL Image",
+                    null,
+                    "The Content",
+                    ZonedDateTime.now(ZoneId.of("-3"))
+            );
+        });
+
+        log.debug("Source null ..");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new News(
+                    "The Title",
+                    "The Source",
+                    "The Author",
+                    "URL",
+                    "URL Image",
+                    "Description",
+                    "The Content",
+                    ZonedDateTime.now(ZoneId.of("-3"))
+            );
+        });
+
+        log.debug("Content null ..");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new News(
+                    "The Title",
+                    "The Source",
+                    "The Author",
+                    "URL",
+                    "URL Image",
+                    "Description",
+                    null
+                    ZonedDateTime.now(ZoneId.of("-3"))
+            );
+        });
+
+        log.debug("PubliSheAt null ..");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new News(
+                    "The Title",
+                    "The Source",
+                    "The Author",
+                    "URL",
+                    "URL Image",
+                    "Description",
+                    "The Content",
+                    null
+
+            );
+        });
+
+        log.debug(".. Done!");
     }
 }

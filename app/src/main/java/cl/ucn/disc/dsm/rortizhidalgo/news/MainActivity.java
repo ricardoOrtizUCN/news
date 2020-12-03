@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2020.
- * Copyright Stoday.year Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
+ * Copyright (c) 2020 Ricardo Ortiz-Hidalgo, ricardo.ortiz@alumnos.ucn.cl
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software
  * and associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -20,9 +19,9 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * The Main Class.

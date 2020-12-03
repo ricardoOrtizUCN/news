@@ -10,54 +10,53 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
 
-import com.github.javafaker.Faker;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.platform.commons.logging.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
-import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
+public class TestNewsApiService {
 
-
-/**
- * Testing of ContractImpl
- * @author Diego Urrutia-Astorga.
- */
-public class TestContractsImpl {
     /**
      * The logger.
      */
-    private static final Logger log = LoggerFactory.getLogger(TestContractsImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(TestNewsApiService.class);
+
     /**
-     * The Test of Retrieve news.
+     * The Testing.
      */
     @Test
-    public void testRetrieveNews(){
-        log.debug("Testing..");
+    public void wrongApi() throws IOException {
 
-        // The implementation
-        Contracts contracts = new ContractsImpl();
+        log.debug("Testing");
 
-        // Call the method
-        List<News> news = contracts.retrieveNews(5);
-        Assertions.assertNotNull(news,"List was null :(");
-        Assertions.assertTrue(news.size()!= 0, "Empty list?:(");
-        Assertions.assertTrue(news.size()==5,"List size !=5 :(");
-        log.debug("Done.");
+        Assertions.assertThrows(IllegalArgumentException.class, ()
+                -> {
+            NewsApiService newsApiService = new NewApiService(null);
+        });
 
-    }
-    @Test
-    public void testFaker(){
-        // Build the faker
-        Faker faker = Faker.instance();
-        for(int i=0; i<5; i++){
-            log.debug("Name:{}", faker.name().fullName());
-            // FIXME: Remover
-            System.out.println("Name: " + faker.name().fullName());
+        log.debug("Wrong key ..");
+        Assertions.assertThrows(RuntimeException.class, ()
+                -> {
+            NewsApiService newsApiService = new NewsApiService("This is my wrong key");
+            List<Article> articles = newsApiService.getTopHeadlines("general", 10);
+            log.debug("Articles: {}.", articles);
+        });
 
+        log.debug("Good Key");
+        {
+            // TODO: Add the real apikey
+            NewsApiService newsApiService = new NewsApiService("<USE REAL API KEY>");
+            List<Article> articles = newsApiService.getTopHeadlines("general", 10);
+            log.debug("Articles: {}.", articles);
+            log.debug("Articles size: {}.", articles.size());
         }
+        {
+            // TODO: Add more testing to the backend
+        }
+        log.debug(".. Done.");
     }
 }

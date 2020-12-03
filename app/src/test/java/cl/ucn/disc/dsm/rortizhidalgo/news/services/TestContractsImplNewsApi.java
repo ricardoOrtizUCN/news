@@ -10,54 +10,57 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
 
-import com.github.javafaker.Faker;
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.junit.platform.commons.logging.Logger;
+import org.junit.platform.commons.logging.LoggerFactory;
 
 import java.util.List;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
 
-
 /**
- * Testing of ContractImpl
- * @author Diego Urrutia-Astorga.
+ * The Test.
+ *
+ * @author Ricardo Ortiz-Hidalgo
  */
-public class TestContractsImpl {
+public class TestContractsImplNewsApi {
+
     /**
      * The logger.
      */
-    private static final Logger log = LoggerFactory.getLogger(TestContractsImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(TestContractsImplNewsApi.class);
+
     /**
-     * The Test of Retrieve news.
+     * The Test of retrieve news.
      */
     @Test
-    public void testRetrieveNews(){
-        log.debug("Testing..");
+    public void testRetrieveNews() {
 
-        // The implementation
-        Contracts contracts = new ContractsImpl();
+        log.debug("Testing ..");
 
-        // Call the method
-        List<News> news = contracts.retrieveNews(5);
-        Assertions.assertNotNull(news,"List was null :(");
-        Assertions.assertTrue(news.size()!= 0, "Empty list?:(");
-        Assertions.assertTrue(news.size()==5,"List size !=5 :(");
-        log.debug("Done.");
+        // The Contracts
+        Contracts contracts = new ContractsImplNewsApi("d49251f091fe4c96a56694b17fd3c739");
 
-    }
-    @Test
-    public void testFaker(){
-        // Build the faker
-        Faker faker = Faker.instance();
-        for(int i=0; i<5; i++){
-            log.debug("Name:{}", faker.name().fullName());
-            // FIXME: Remover
-            System.out.println("Name: " + faker.name().fullName());
+        //The list of news
+        int size = 20;
+        List<News> news = contracts.retrieveNews(size);
+
+        //Validations!
+        Assertions.assertNotNull(news, "List null !!");
+        Assertions.assertEquals(size, news.size(), "Wrong size!");
+
+        // Show the news
+        for (News n : news) {
+            log.debug("News: {}.", ToStringBuilder.reflectionToString(n, ToStringStyle.MULTI_LINE_STYLE));
 
         }
+        log.debug(".. end");
+
+
     }
+
+
 }

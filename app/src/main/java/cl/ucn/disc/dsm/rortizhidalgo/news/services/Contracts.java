@@ -10,7 +10,9 @@
  */
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
+
 import java.util.List;
+
 import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
 
 /**
@@ -22,6 +24,7 @@ public interface Contracts {
 
     /**
      * Get the list of News.
+     *
      * @param size size of the list
      * @return the list of News.
      */
