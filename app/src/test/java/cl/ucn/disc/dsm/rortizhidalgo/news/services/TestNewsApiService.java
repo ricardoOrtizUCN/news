@@ -10,13 +10,17 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
 
+
+import com.kwabenaberko.newsapilib.models.Article;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.logging.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 public class TestNewsApiService {
 
@@ -35,7 +39,7 @@ public class TestNewsApiService {
 
         Assertions.assertThrows(IllegalArgumentException.class, ()
                 -> {
-            NewsApiService newsApiService = new NewApiService(null);
+            NewsApiService newsApiService = new NewsApiService(null);
         });
 
         log.debug("Wrong key ..");
