@@ -18,7 +18,6 @@ package cl.ucn.disc.dsm.rortizhidalgo.news.utils;
  */
 public class Validation {
 
-
     /**
      * Check nullity.
      *
@@ -27,9 +26,8 @@ public class Validation {
      */
     public static void notNull(Object o, String message) {
         if (o == null) {
+            throw new IllegalArgumentException("Argument null or wrong size -> " + message);
         }
-        throw new IllegalArgumentException("Argument null or wrong size -> " + message);
-
     }
 
     /**
@@ -40,13 +38,9 @@ public class Validation {
      * @param message to check.
      */
     public static void minSize(String value, int minSize, String message) {
-
-        // Nullity
         notNull(value, message);
-
         if (value.length() < minSize) {
             throw new IllegalArgumentException("Argument null or wrong size ->" + message);
-
         }
     }
 }
