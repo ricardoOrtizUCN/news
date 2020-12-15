@@ -11,12 +11,18 @@
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
 
 
+import com.kwabenaberko.newsapilib.models.Article;
+import com.kwabenaberko.newsapilib.models.response.ArticleResponse;
+import com.kwabenaberko.newsapilib.network.APIClient;
+import com.kwabenaberko.newsapilib.network.APIService;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.utils.Validation;
+import retrofit2.Response;
 
 /**
  * The Contracts from CU/UH.
@@ -43,7 +49,7 @@ public class NewsApiService {
     public NewsApiService(String apiKey) {
         Validation.notNull(apiKey, "apiKey");
         this.apiKey = apiKey;
-        this.apiService = APICliente.getAPIService();
+        this.apiService = APIClient.getAPIService();
     }
 
     /**
@@ -60,7 +66,7 @@ public class NewsApiService {
         Validation.notNull(pageSize, "pageSize");
 
         if (pageSize < 1) {
-            throw new IllegalArgumentException("Error: pageSize nees to be >0");
+            throw new IllegalArgumentException("Error: pageSize need to be >0");
         }
 
         // TODO: Implements the correct map to request parameters.
@@ -75,7 +81,7 @@ public class NewsApiService {
         query.put("category", category);
         // query.put("sources", topHeadlineRequest.getSources());
         // query.put("q", topHeadlineRequest.getQ());
-        query.put("pageSize", topHeadlineRequest.getPageSize());
+        query.put("pageSize", pageSize.toString());
 
         // The response (sincronic!)
         Response<ArticleResponse> response = apiService.getTopHeadlines(query).execute();
