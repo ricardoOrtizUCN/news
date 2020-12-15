@@ -14,11 +14,11 @@ import com.github.javafaker.Faker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
@@ -75,9 +75,9 @@ public class ContractsImplFaker implements Contracts {
 
         // Return all the data
         if (size > theNews.size()) {
-            return Collection.unmodifiableList(this.theNews);
+            return Collections.unmodifiableList(this.theNews);
         }
-        return Collection.unmodifiableList(theNews.subList(theNews.size() - size,
+        return Collections.unmodifiableList(theNews.subList(theNews.size() - size,
                 theNews.size()));
     }
 
