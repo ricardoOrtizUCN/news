@@ -9,16 +9,14 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package cl.ucn.disc.dsm.rortizhidalgo.news.services;
+package cl.ucn.disc.dsm.rortizhidalgo.news.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.time.ZonedDateTime;
-
-import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 
 /**
  * Testing validation of class News
@@ -26,10 +24,11 @@ import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
  * @author Diego Urrutia-Astorga.
  */
 public class TestNews {
+
     /**
      * The logger.
      */
-    private static final Logger log = LoggerFactory.getLogger(TestContractsImplFaker.class);
+    private static final Logger log = LoggerFactory.getLogger(TestNews.class);
 
     @Test
     public void testConstructor() {
@@ -55,7 +54,7 @@ public class TestNews {
         log.debug("Title null ..");
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new News(
-                    "The Title",
+                    null,
                     "The Source",
                     "The Author",
                     "URL",
@@ -70,8 +69,22 @@ public class TestNews {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new News(
                     "The Title",
-                    "The Source",
+                    null,
                     "The Author",
+                    "URL",
+                    "URL Image",
+                    "Description",
+                    "The Content",
+                    ZonedDateTime.now(ZoneId.of("-3"))
+            );
+        });
+
+        log.debug("Author null ..");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            new News(
+                    "The Title",
+                    "The Source",
+                    null,
                     "URL",
                     "URL Image",
                     "Description",
@@ -94,20 +107,6 @@ public class TestNews {
             );
         });
 
-        log.debug("Source null ..");
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new News(
-                    "The Title",
-                    "The Source",
-                    "The Author",
-                    "URL",
-                    "URL Image",
-                    "Description",
-                    "The Content",
-                    ZonedDateTime.now(ZoneId.of("-3"))
-            );
-        });
-
         log.debug("Content null ..");
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new News(
@@ -117,12 +116,12 @@ public class TestNews {
                     "URL",
                     "URL Image",
                     "Description",
-                    null
+                    null,
                     ZonedDateTime.now(ZoneId.of("-3"))
             );
         });
 
-        log.debug("PubliSheAt null ..");
+        log.debug("PublisheAt null ..");
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             new News(
                     "The Title",
@@ -140,3 +139,4 @@ public class TestNews {
         log.debug(".. Done!");
     }
 }
+
