@@ -11,7 +11,7 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
 
-import com.kwabenerko.newsapilib.models.Aticle;
+import com.kwabenaberko.newsapilib.models.Article;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -33,7 +33,7 @@ import cl.ucn.disc.dsm.rortizhidalgo.news.utils.Validation;
  *
  * @author Ricardo Ortiz-Hidalgo
  */
-public class ContractsImplNewsApi implements Contracts {
+public final class ContractsImplNewsApi implements Contracts {
 
     /**
      * The logger.
@@ -52,7 +52,7 @@ public class ContractsImplNewsApi implements Contracts {
      */
     public ContractsImplNewsApi(final String theApiKey) {
         Validation.minSize(theApiKey, 10, "Api Key!!");
-        this.newsApiService = new NewApiService(theApiKey);
+        this.newsApiService = new NewsApiService(theApiKey);
 
     }
 
@@ -75,7 +75,7 @@ public class ContractsImplNewsApi implements Contracts {
         }
 
         //Fix more restrictions :(
-        if (article.getDescription() == null || article.getDesciption().lengh() == 0) {
+        if (article.getDescription() == null || article.getDescription().length() == 0) {
             article.setDescription("No description");
             needFix = true;
         }
@@ -88,13 +88,13 @@ public class ContractsImplNewsApi implements Contracts {
         }
 
         // The date
-        ZonedDateTime publishedAt = ZonedDateTime.parse(article.getPublishetAt())
+        ZonedDateTime publishedAt = ZonedDateTime.parse(article.getPublishedAt())
                 .withZoneSameInstant(ZoneId.of("-3"));
 
         // The News
         return new News(
                 article.getTitle(),
-                article.getSource(),
+                article.getSource().getName(),
                 article.getAuthor(),
                 article.getUrl(),
                 article.getUrlToImage(),
@@ -112,7 +112,7 @@ public class ContractsImplNewsApi implements Contracts {
      * @return the List of News.
      */
     @Override
-    public List<News> retrieveNews(final integer size) {
+    public List<News> retrieveNews(final Integer size) {
 
         try {
             List<Article> articles = newsApiService.getTopHeadlines("technology", size);
@@ -122,7 +122,7 @@ public class ContractsImplNewsApi implements Contracts {
             for (Article article : articles) {
                 // log.debug("Article: {}", ToStringBuilder.reflectionToString
                 // (article, ToStringStyle.MULTI_LINE_STYLE))
-                new.add(toNews(article));
+                news.add(toNews(article));
             }
             return news;
 
