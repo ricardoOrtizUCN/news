@@ -9,14 +9,13 @@
  */
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.services;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZonedDateTime;
 
-import java.time.Clock;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
@@ -64,31 +63,41 @@ public class TestContractsImplFaker {
         //size = 3
         Assertions.assertEquals(3, contracts.retrieveNews(3).size(), "List != 0");
         //size =10
-       //Assertions.assertTrue(contracts.retrieveNews(10).size() <=10,"List != 10");
+        Assertions.assertTrue(contracts.retrieveNews(10).size() <=10,"List != 10");
 
         log.debug("Done ..");
 
     }
 
     /**
-     *
-     *
+     * The Test of Save News
      */
     @Test
     public void testSaveNews(){
 
         log.debug("Testing..");
 
-
-        // The implementation
+        // The concrete implementation
         Contracts contracts = new ContractsImplFaker();
-        // Create a news
-        News news = new News("A","S","Autor", "","",
-                "Hola Mundo", "HolaMundo", ZonedDateTime.now(Clock.systemUTC()));
 
-        // Add news
-        contracts.saveNews(news);
-        log.debug("Done ..");
+        // Nullity
+        Assertions.assertThrows(IllegalArgumentException.class, () -> contracts.saveNews(null));
+
+        int size = contracts.retrieveNews(1000).size();
+        log.debug("Size: {}.", size);
+
+        // Saving ok?
+
+       News news = new News(
+               "The Title",
+               "The Source",
+               "The Author",
+               null,
+               null,
+               "The Description",
+               "The Content",
+               ZonedDateTime.now(ZoneId.of("-3")));
+       contracts.saveNews(news);
 
     }
 
