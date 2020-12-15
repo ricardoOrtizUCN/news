@@ -12,7 +12,7 @@ package cl.ucn.disc.dsm.rortizhidalgo.news.model;
 
 import net.openhft.hashing.LongHashFunction;
 
-import java.time.ZonedDateTime;
+import org.threeten.bp.ZonedDateTime;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.utils.Validation;
 
@@ -114,6 +114,7 @@ public final class News {
         Validation.notNull(publishedAt, "publishedAt");
         this.publishedAt = publishedAt;
     }
+
 
     /**
      * @return the id.
