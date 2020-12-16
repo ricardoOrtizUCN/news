@@ -19,24 +19,71 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
+import cl.ucn.disc.dsm.rortizhidalgo.news.services.Contracts;
+import cl.ucn.disc.dsm.rortizhidalgo.news.services.ContractsImplNewsApi;
 
 /**
  * The Main Class.
  * @author Ricardo Ortiz-Hidalgo
  */
 
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
+    /**
+     * The logger.
+     */
+    private static final Logger log = LoggerFactory.getLogger(MainActivity.class);
 
     /**
-     * OnCreate.
-     * @param savedInstanceState used to reaload the app
+     *  The List View
+     */
+    protected ListView listView;
+
+    /**
+     * Oncreate.
+     *
+     * @param savedInstanceState used ti reload the app.
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        log.debug("onCreate...");
         setContentView(R.layout.activity_main);
+
+        // Get the ListView from layout
+        this.listView = findViewById(R.id.am_t_toolbar);
+
+        // Click un one item
+        this.listView.setOnItemClickListener((parent, view, position, id) -> {
+            log.debug("Position: {}, Id: {}.",position,id);
+        });
+        // Running in BackgroundThread...
+        AsyncTask.execute(()->{
+            // Using the contracts to get the news...
+            Contracts contracts = new ContractsImplNewsApi("d49251f091fe4c96a56694b17fd3c739");
+
+            // Get the news from NewAPi (internet)
+            List<News> listNews = contracts.retrieveNews(30);
+
+            //Build the simple adapter to populate the list
+            ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,listNews);
+
+            //... update the listView in Uithread
+            runOnUiThread(()->{
+                this.listView.setAdapter(adapter);
+            });
+        });
     }
 }
