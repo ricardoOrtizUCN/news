@@ -24,6 +24,11 @@ import org.threeten.bp.ZonedDateTime;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import cl.ucn.disc.dsm.rortizhidalgo.news.model.News;
 import cl.ucn.disc.dsm.rortizhidalgo.news.utils.Validation;
@@ -34,104 +39,117 @@ import cl.ucn.disc.dsm.rortizhidalgo.news.utils.Validation;
  * @author Ricardo Ortiz-Hidalgo
  */
 public final class ContractsImplNewsApi implements Contracts {
-
     /**
-     * The logger.
+     * The logger
      */
     private static final Logger log = LoggerFactory.getLogger(ContractsImplNewsApi.class);
 
     /**
-     * The connection to NewsApi
+     * The Connection to NewApi
      */
     private final NewsApiService newsApiService;
 
     /**
-     * The Constructor
+     * the constructor
      *
-     * @param theApiKey to use.
+     * @param theApikey to use
      */
-    public ContractsImplNewsApi(final String theApiKey) {
-        Validation.minSize(theApiKey, 10, "Api Key!!");
-        this.newsApiService = new NewsApiService(theApiKey);
-
+    public ContractsImplNewsApi(final String theApikey) {
+        //validation apikey
+        //Validation.notNull(apikey, "apikey");
+        Validation.minSize(theApikey,10,"ApiKey !!");
+        this.newsApiService = new NewsApiService(theApikey);
     }
 
     /**
-     * The Assember/Tranformer pattern!
-     *
-     * @param article used to source.
+     * Article to news/Transformer pattern
+     * @param article used to convert
      * @return the News.
      */
-    private static News toNews(final Article article) {
-        Validation.notNull(article, "Article null !?!");
+    private static News toNews(final Article article){
+        //validation null news
+        Validation.notNull(article,"Article null??");
 
-        // Warning message?
-        boolean needFix = false;
+        //warning message
+        boolean needFix=false;
 
-        // Fix the author null :(
-        if (article.getAuthor() == null) {
-            article.setAuthor("No author");
-            needFix = true;
+        //Fix the author is null
+        if(article.getAuthor()==null || article.getAuthor().length()==0){
+            article.setAuthor("*No author*");
+            needFix=true;
         }
-
-        //Fix more restrictions :(
-        if (article.getDescription() == null || article.getDescription().length() == 0) {
-            article.setDescription("No description");
-            needFix = true;
+        //more restriction
+        if (article.getDescription()==null||article.getDescription().length()==0){
+            article.setDescription("*No description*");
+            needFix=true;
         }
-
-        // .. yes, warning messege.
-        if (needFix) {
-            // Debug of Article
-            log.warn("Article with invalid restrictions: {}.", ToStringBuilder.reflectionToString(
+        //yes warning
+        if(needFix==true){
+            //Debug of Article
+            log.warn("Article with invalid restriction: ().", ToStringBuilder.reflectionToString(
                     article, ToStringStyle.MULTI_LINE_STYLE));
         }
+        //the date
+        ZonedDateTime publishedAt= ZonedDateTime.parse(article.getPublishedAt()).withZoneSameInstant(ZoneId.of("-3"));
 
-        // The date
-        ZonedDateTime publishedAt = ZonedDateTime.parse(article.getPublishedAt())
-                .withZoneSameInstant(ZoneId.of("-3"));
-
-        // The News
-        return new News(
-                article.getTitle(),
+        //the news
+        return new News(article.getTitle(),
                 article.getSource().getName(),
                 article.getAuthor(),
                 article.getUrl(),
                 article.getUrlToImage(),
                 article.getDescription(),
-                article.getDescription(), // FIXME: Where is the content?
-                publishedAt
-        );
-
+                article.getDescription(), //Fix content
+                publishedAt);
     }
 
     /**
      * Get the list of News.
      *
-     * @param size of the list.
-     * @return the List of News.
+     * @param size size of the list.
+     * @return the list of News.
      */
     @Override
     public List<News> retrieveNews(final Integer size) {
 
         try {
-            List<Article> articles = newsApiService.getTopHeadlines("technology", size);
+            //Request to newApi category "general"
+            List<Article> articles =newsApiService.getTopHeadlines("technology",size);
 
-            // The List of Articles to List of News
+            //The list of articles to list of news
             List<News> news = new ArrayList<>();
-            for (Article article : articles) {
-                // log.debug("Article: {}", ToStringBuilder.reflectionToString
-                // (article, ToStringStyle.MULTI_LINE_STYLE))
+
+            //iterate over the articles
+            for (Article article : articles){
+                //articles -> News
                 news.add(toNews(article));
             }
-            return news;
-
+            //Filter and sort the News
+            return news.stream().filter(distintById(News::getId))
+                    // Remote the duplicates (by id)
+                    .sorted((k1,k2)->k2
+                            // Sort the stream by publishedAt
+                            .getPublishedAt().compareTo(k1.getPublishedAt()))
+                    // Return the stream to List
+                    .collect(Collectors.toList());
         } catch (IOException ex) {
-            log.error("Error", ex);
-            return null;
-
+            //log.error("Error",ex);
+            //return null;
+            //Encapsulate!
+            throw new RuntimeException(ex);
         }
+    }
 
+    /**
+     * Filter the stream.
+     *
+     * @param idExtractor
+     * @param <T> news to filter
+     * @return true if the news already exists.
+     */
+    private static <T> Predicate<T> distintById (Function<? super T, ?> idExtractor){
+        Map<Object, Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(idExtractor.apply(t),Boolean.TRUE)==null;
     }
 
     /**
@@ -139,8 +157,8 @@ public final class ContractsImplNewsApi implements Contracts {
      *
      * @param news to save.
      */
-    public void saveNews(final News news) {
-        throw new NotImplementedException("Can't save in NewsApi");
-
+    @Override
+    public void saveNews(News news) {
+        throw new NotImplementedException("Can´t save news in NewsApi!");
     }
 }
