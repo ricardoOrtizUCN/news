@@ -59,7 +59,7 @@ public class NewsItem extends ModelAbstractItem<News, NewsItem, NewsItem.ViewHol
 
     @Override
     public int getType(){
-        return R.id.am_lv_news;
+        return R.id.am_t_toolbar;
     }
 
     /**
