@@ -10,6 +10,8 @@
 
 package cl.ucn.disc.dsm.rortizhidalgo.news.model;
 
+import androidx.annotation.NonNull;
+
 import net.openhft.hashing.LongHashFunction;
 
 import org.threeten.bp.ZonedDateTime;
@@ -82,7 +84,8 @@ public final class News {
      * @param content     can't be null.
      * @param publishedAt can't be null.
      */
-    public News(String title, String source, String author, String url, String urlImage, String description, String content, ZonedDateTime publishedAt) {
+    public News(String title, String source, String author, String url, String urlImage,
+                String description, String content, ZonedDateTime publishedAt) {
         // Validation de title
         Validation.minSize(title, 2, "title");
         this.title = title;
@@ -119,7 +122,7 @@ public final class News {
     /**
      * @return the id.
      */
-    public Long getId() {
+    public  Long getId() {
         return id;
     }
 
@@ -177,5 +180,12 @@ public final class News {
      */
     public ZonedDateTime getPublishedAt() {
         return publishedAt;
+    }
+
+    // TODO: Remove after testing
+    @NonNull
+    @Override
+    public String toString(){
+        return this.title;
     }
 }
